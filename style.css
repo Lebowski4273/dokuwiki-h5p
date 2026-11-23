@@ -1,5 +1,7 @@
 /* DokuWiki Plugin h5p */
 
+
+
 .dokuwiki div.plugin_h5p {
     margin: 0 0 1.4em 0;
     width: 100%;
@@ -24,6 +26,10 @@
 
 .dokuwiki .plugin_h5p_admin td code {
     white-space: nowrap;
+}
+
+dokuwiki a.mediafile.mf_h5p {
+    background-image: url('admin.svg');
 }
 
 .dokuwiki div.plugin_h5p_tools {
