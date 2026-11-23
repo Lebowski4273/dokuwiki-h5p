@@ -1,0 +1,3 @@
+This page manages the centrally stored H5P libraries. H5P files in the wiki only contain their content; the code of the content types is stored once on the server.
+
+New libraries are added in three ways: from the official H5P Hub, with the file upload below (H5P file or zip of library folders), or automatically when a permitted user uploads an H5P file containing libraries to the media manager. Many H5P files (e.g. from h5p.org) no longer contain libraries; use the Hub for those. A library is only replaced by a higher patch version.

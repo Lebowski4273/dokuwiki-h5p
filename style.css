@@ -1,0 +1,51 @@
+/* DokuWiki Plugin h5p */
+
+.dokuwiki div.plugin_h5p {
+    margin: 0 0 1.4em 0;
+    width: 100%;
+}
+
+.dokuwiki div.plugin_h5p iframe {
+    border: 0;
+    width: 100%;
+}
+
+.dokuwiki div.plugin_h5p_error {
+    margin: 0 0 1.4em 0;
+    padding: 0.6em 1em;
+    border-left: 4px solid #c0392b;
+    background-color: #fbeaea;
+    color: #333;
+}
+
+.dokuwiki .plugin_h5p_admin form {
+    margin: 0;
+}
+
+.dokuwiki .plugin_h5p_admin td code {
+    white-space: nowrap;
+}
+
+.dokuwiki div.plugin_h5p_tools {
+    margin: -0.8em 0 1.4em 0;
+    font-size: 0.9em;
+}
+
+.dokuwiki div.plugin_h5p_tools button {
+    font-size: 0.9em;
+}
+
+.dokuwiki div.plugin_h5p_msgs > div,
+.dokuwiki div.plugin_h5p_msgs > button {
+    margin-top: 0.4em;
+    /*margin-top: 0.4em;*/
+}
+
+.dokuwiki div.plugin_h5p_msg {
+    padding: 0.3em 0.8em;
+    border-left: 4px solid #999;
+}
+
+.dokuwiki div.plugin_h5p_msg_error   { border-color: #c0392b; background: #fbeaea; }
+.dokuwiki div.plugin_h5p_msg_success { border-color: #27ae60; background: #eafaf0; }
+.dokuwiki div.plugin_h5p_msg_notify  { border-color: #e6a700; background: #fff8e1; }

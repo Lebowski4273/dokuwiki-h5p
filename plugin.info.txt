@@ -1,0 +1,7 @@
+base   h5p
+author Martin Schulte
+email  jltk.org@gmail.com
+date   2026-11-22
+name   H5P
+desc   Zeigt H5P-Inhalte aus dem Medienmanager an. Die H5P-Bibliotheken werden zentral verwaltet.
+url    https://www.dokuwiki.org/plugin:h5p
