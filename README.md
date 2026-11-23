@@ -1,4 +1,8 @@
+[English](README.md) | [Deutsch](README.de.md)
+
 # DokuWiki H5P Plugin
+
+
 
 This plugin can display H5P content on DokuWiki pages. However, the `.h5p` files must be created externally (Lumi, Moodle, h5p.org, etc.). They are then uploaded via the Media Manager and can be embedded on wiki pages. There is a small convenience feature: a **Replace H5P file** button can be shown below H5P content, saving a trip through the Media Manager when you have modified an existing file in an external tool. H5P libraries (content types) are **not** stored inside every H5P file, but rather once centrally on the server.
 

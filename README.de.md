@@ -1,3 +1,5 @@
+[English](README.md) | [Deutsch](README.de.md)
+
 # DokuWiki-Plugin H5P
 
 
