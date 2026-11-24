@@ -1,180 +1,139 @@
-# DokuWiki-Plugin H5P
+[English](README.md) | [Deutsch](README.de.md)
+
+# DokuWiki H5P Plugin
 
 
-Dieses Plugin kann h5p-Inhalte auf dokuwiki-Seiten anzeigen. Die h5p-Dateien müssen aber
-extern erstellt werden (Lumi, moodle, h5p.org, ...). Sie werden dann mit dem Medienmanager
-hochgeladen und können auf Wiki-Seiten eingebunden werden.  Eine kleine Erleichterung gibt
-es: Unter den h5p-Inhalten kann man einen Button Ersetzen`` anzeigen, dies erspart den Weg
-über den Medienmanager, wenn man eine vorhandene Datei mit dem externen Werkzeug verändert hat.
-Die H5P-Bibliotheken (Inhaltstypen) werden **nicht** in jeder H5P-Datei gespeichert,
-sondern einmal zentral auf dem Server.
 
-Die Adminseite bietet die Möglichkeit h5p-Bibliothken zu installieren. Außerdem können 
-verwaiste Inhalte (entpackte h5p-Dateien, deren Ursprungsdatei aber gelöscht wurde) entfernt
-werden. In der Konfiguration kann man angeben, welche Nutzer oder Nutzergruppen gestattet ist
-Bibliotheken zu installieren. Standarmäßig können die admin-Nutzer dies immer.
+This plugin can display H5P content on DokuWiki pages. However, the `.h5p` files must be created externally (Lumi, Moodle, h5p.org, etc.). They are then uploaded via the Media Manager and can be embedded on wiki pages. There is a small convenience feature: a **Replace H5P file** button can be shown below H5P content, saving a trip through the Media Manager when you have modified an existing file in an external tool. H5P libraries (content types) are **not** stored inside every H5P file, but rather once centrally on the server.
 
-Zum Abspielen wird der Player [h5p-standalone](https://github.com/tunapanda/h5p-standalone)
-(MIT-Lizenz) verwendet. Er läuft komplett im Browser. Das Plugin muss deshalb nur Dateien
-entpacken und ausliefern.
-Ich verwende die schon mit npm gepackten Dateien von https://www.jsdelivr.com/package/npm/h5p-standalone?tab=files&path=dist
-diese liegen in vendor/h5p-standalone
+The admin page lets you install H5P libraries. It can also remove orphaned content (unpacked H5P files whose source file has been deleted). In the configuration, you can specify which users or user groups are allowed to install libraries. By default, admin users can always do this.
 
+Playback uses the [h5p-standalone](https://github.com/tunapanda/h5p-standalone) player (MIT license). It runs completely in the browser, so the plugin only needs to unpack and serve files. I use the files already packaged with npm from [https://www.jsdelivr.com/package/npm/h5p-standalone?tab=files&path=dist](https://www.jsdelivr.com/package/npm/h5p-standalone?tab=files&path=dist); these live in `vendor/h5p-standalone`.
 
 ## Installation
 
-1. Den Ordner `h5p` nach `lib/plugins/h5p/` kopieren oder die Installation über die Admin-Seite anstoßen
-2. Unter `lib/plugins/h5p/vendor/h5p-standalone/` liegen doe schon mit npm gepackten Datein von
-   https://www.jsdelivr.com/package/npm/h5p-standalone?tab=files&path=dist
-   
-   Sollte man eine andere Vesion besorgen, die .zip von [h5p-standalone](https://github.com/tunapanda/h5p-standalone)
-   herunterladen und  und den Inhalt des `dist`-Ordners nach
-   `lib/plugins/h5p/vendor/h5p-standalone/` kopieren. Zum Beispiel:
-   ```
-   npm pack h5p-standalone
-   tar xzf h5p-standalone-*.tgz
-   cp -r package/dist/* lib/plugins/h5p/vendor/h5p-standalone/
-   ```
-   Danach müssen dort mindestens `main.bundle.js`, `frame.bundle.js` und `styles/h5p.css`
-   liegen. Die Admin-Seite zeigt an, ob der Player gefunden wurde.
-3. **Dateityp `.h5p` erlauben:** in `conf/mime.local.conf` diese Zeile ergänzen:
-   ```
-   h5p   application/zip
-   ```
-4. **Webserver:** Die Dateien werden über Pfade wie
-   `lib/plugins/h5p/file.php/c/…/h5p.json` ausgeliefert.
-   - Apache: funktioniert in der Regel ohne Änderungen.
-   - nginx: Die PHP-Location muss auch Pfade *nach* `.php` weiterreichen, z. B.
-     ```
-     location ~ \.php(/|$) {
-         fastcgi_split_path_info ^(.+?\.php)(/.*)$;
-         fastcgi_param PATH_INFO $fastcgi_path_info;
-         # … übrige fastcgi-Einstellungen
-     }
-     ```
-5. Das Datenverzeichnis muss für den Webserver beschreibbar sein. Standardmäßig wird
-   `data/h5p/` angelegt.
-6. Unter Administration → H5P-Bibliotheken die fehlenden Bibliotheken vom Hub installieren.
-   Für den Hub braucht der Server ausgehende HTTPS-Verbindungen zu api.h5p.org.
+1. Copy the `h5p` folder to `lib/plugins/h5p/` or trigger the installation via the admin page.
+2. The files already packaged with npm from [https://www.jsdelivr.com/package/npm/h5p-standalone?tab=files&path=dist](https://www.jsdelivr.com/package/npm/h5p-standalone?tab=files&path=dist) are located under `lib/plugins/h5p/vendor/h5p-standalone/`.
+If you get a different version, download the `.zip` from [h5p-standalone](https://github.com/tunapanda/h5p-standalone) and copy the contents of the `dist` folder to `lib/plugins/h5p/vendor/h5p-standalone/`. For example:
+```
+npm pack h5p-standalone
+tar xzf h5p-standalone-*.tgz
+cp -r package/dist/* lib/plugins/h5p/vendor/h5p-standalone/
 
-## Benutzung
+```
+
+
+Afterward, at least `main.bundle.js`, `frame.bundle.js`, and `styles/h5p.css` must be present there. The admin page shows whether the player was found.
+3. **Allow the `.h5p` file type:** Add this line to `conf/mime.local.conf`:
+```
+h5p   application/zip
+
+```
+
+
+4. **Web server:** Files are served over paths like `lib/plugins/h5p/file.php/c/…/h5p.json`.
+* Apache: usually works without changes.
+* nginx: The PHP location must also pass paths *after* `.php`, for example:
+```
+location ~ \.php(/|$) {
+    fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+    fastcgi_param PATH_INFO $fastcgi_path_info;
+    # … remaining fastcgi settings
+}
+
+```
+
+
+
+
+5. The data directory must be writable by the web server. By default, `data/h5p/` is created.
+6. Under **Admin → H5P Libraries**, install the missing libraries from the Hub. For the Hub, the server needs outgoing HTTPS connections to `api.h5p.org`.
+
+## Usage
 
 ```
 {{h5p>unterricht:informatik:variablen.h5p}}
 {{h5p>variablen.h5p?width=800&frame=1&copyright=1}}
+
 ```
 
-Relative Angaben werden wie bei normalen Medien zum Namensraum der Seite aufgelöst.
+Relative paths are resolved to the page's namespace, just like regular media files.
 
-### Inhalte aktualisieren („H5P-Datei ersetzen“)
+### Updating content ("Replace H5P file")
 
-Bearbeitet wird außerhalb des Wikis, z. B. in Lumi. Unter jedem H5P-Inhalt erscheint für
-Benutzer, die die Datei überschreiben dürfen (ACL-Recht *Löschen* auf die Mediendatei), der
-Knopf **H5P-Datei ersetzen**. Ablauf:
+Editing happens outside the wiki, for example in Lumi. Below each H5P item, users who are allowed to overwrite the file (ACL *Delete* permission on the media file) see the **Replace H5P file** button. Workflow:
 
-1. Mit „Reuse“ herunterladen (oder die eigene Lumi-Datei nehmen) und in Lumi bearbeiten.
-2. Unter dem Inhalt auf „H5P-Datei ersetzen“ klicken und die neue Datei wählen.
-3. Die Seite lädt neu und zeigt die neue Version.
+1. Download with "Reuse" (or use your own Lumi file) and edit it in Lumi.
+2. Click **Replace H5P file** below the content and choose the new file.
+3. The page reloads and displays the new version.
 
-Das Ersetzen läuft über die normale Upload-Funktion von DokuWiki: Die alte Version bleibt
-in der Versionsgeschichte des Medienmanagers, Bibliotheken werden wie beim Upload behandelt.
-Der Knopf erscheint auch unter einer Fehlermeldung, sodass sich kaputte Dateien direkt
-austauschen lassen. Abschaltbar mit `replace`.
+Replacing runs through DokuWiki's normal upload function: the old version stays in the Media Manager's revision history, and libraries are handled just like on upload. The button also appears below an error message so broken files can be swapped out directly. Can be disabled with `replace`.
 
-| Parameter    | Bedeutung                                      |
-|--------------|------------------------------------------------|
-| `width`      | maximale Breite, z. B. `800`, `800px`, `80%`   |
-| `frame`      | Aktionsleiste anzeigen (`1`/`0`)               |
-| `copyright`  | Copyright-Schaltfläche (`1`/`0`, braucht frame) |
-| `fullscreen` | Vollbild-Schaltfläche (`1`/`0`)                |
-| `icon`       | H5P-Logo (`1`/`0`, braucht frame)              |
-| `export`     | „Reuse“-Download (`1`/`0`, braucht frame)      |
+| Parameter | Meaning |
+| --- | --- |
+| `width` | maximum width, e.g. `800`, `800px`, `80%` |
+| `frame` | show action bar (`1`/`0`) |
+| `copyright` | copyright button (`1`/`0`, requires `frame`) |
+| `fullscreen` | fullscreen button (`1`/`0`) |
+| `icon` | H5P logo (`1`/`0`, requires `frame`) |
+| `export` | "Reuse" download (`1`/`0`, requires `frame`) |
 
-Die Höhe passt der Player automatisch an den Inhalt an.
+The player automatically adjusts its height to fit the content.
 
-## Wie die Bibliotheken verwaltet werden
+## How libraries are managed
 
-Viele H5P-Dateien enthalten **keine Bibliotheken** mehr. Downloads von h5p.org zum
-Beispiel enthalten seit Anfang 2025 nur noch `h5p.json` und `content/`. Das Plugin ist
-darauf ausgelegt. Inhalte und Bibliotheken liegen getrennt.
+Many H5P files **no longer contain libraries**. Downloads from h5p.org, for example, have contained only `h5p.json` and `content/` since early 2025. The plugin is designed for this: content and libraries are stored separately.
 
 ```
 data/h5p/
-├── libraries/                  zentrale Bibliotheken
+├── libraries/                  central libraries
 │   ├── H5P.ArithmeticQuiz-1.1/
 │   ├── H5P.JoubelUI-1.3/
 │   └── …
-├── libraries.updated           Zeitstempel, leert bei Änderungen den Seiten-Cache
-├── hub.json                    Hub-Registrierung und Liste der Inhaltstypen
-└── content/<md5>/              entpackter Inhalt je H5P-Datei (h5p.json + content/)
+├── libraries.updated           timestamp; clears page cache on changes
+├── hub.json                    Hub registration and list of content types
+└── content/<md5>/              unpacked content per H5P file (h5p.json + content/)
+
 ```
 
-**Upload in den Medienmanager:** Jede gültige H5P-Datei wird angenommen. Fehlen
-Bibliotheken, gibt es einen Hinweis, und auf der Seite erscheint statt des Players eine
-Meldung mit den fehlenden Bibliotheken. Lädt ein Manager (oder ein Mitglied von
-`libmanagers`) eine Datei *mit* Bibliotheken hoch, werden diese zentral installiert und
-aus der Datei entfernt (abschaltbar mit `strip_on_upload`). Bibliothekscode von anderen
-Benutzern wird nie übernommen.
+**Upload to the Media Manager:** Every valid H5P file is accepted. If libraries are missing, there is a notice, and a message listing the missing libraries appears on the page instead of the player. When a manager (or a member of `libmanagers`) uploads a file *with* libraries, they are installed centrally and stripped from the file (can be disabled with `strip_on_upload`). Library code from other users is never adopted.
 
-**Admin-Seite** (Administration → H5P-Bibliotheken), nur für Manager und Admins:
+**Admin page** (**Admin → H5P Libraries**), available only to managers and admins:
 
-1. *Fehlende Bibliotheken:* durchsucht alle H5P-Dateien im Medienmanager und zeigt, was
-   fehlt und welche Datei es braucht. Mit einem Knopf lassen sie sich einzeln oder alle
-   zusammen vom Hub installieren.
-2. *Inhaltstyp vom H5P-Hub installieren:* lädt die neueste Version eines Inhaltstyps mit
-   allen Abhängigkeiten von api.h5p.org. Beim ersten Mal registriert sich das Wiki beim
-   Hub (wie WordPress oder Moodle) und speichert die erhaltene UUID in `hub.json`. Der
-   Server baut die Verbindung nur auf Knopfdruck auf. Abschaltbar mit `hub`.
-3. *Bibliotheken aus einer Datei installieren:* H5P-Dateien mit Bibliotheken oder
-   ZIP-Dateien mit Bibliotheksordnern (jeder Ordner mit `library.json`, auch verschachtelt),
-   z. B. der Bibliotheksordner aus Lumi oder Moodle. Das funktioniert ohne Hub.
-4. *Installierte Bibliotheken:* Übersicht mit Abhängigkeiten, Löschen.
+1. *Missing libraries:* scans all H5P files in the Media Manager and shows what is missing and which file needs it. One button lets you install them individually or all together from the Hub.
+2. *Install content type from H5P Hub:* downloads the latest version of a content type with all dependencies from `api.h5p.org`. The first time, the wiki registers with the Hub (like WordPress or Moodle) and saves the returned UUID in `hub.json`. The server only opens the connection on button click. Can be disabled with `hub`.
+3. *Install libraries from a file:* H5P files containing libraries or ZIP files containing library folders (any folder with a `library.json`, including nested ones), e.g., the library folder from Lumi or Moodle. This works without the Hub.
+4. *Installed libraries:* overview with dependencies, deletion.
 
-Eine Bibliothek wird nur durch eine höhere Patch-Version ersetzt. Verschiedene
-Minor-Versionen (z. B. `H5P.Question-1.4` und `-1.5`) liegen nebeneinander.
+A library is only replaced by a higher patch version. Different minor versions (e.g., `H5P.Question-1.4` and `-1.5`) coexist side by side.
 
-### Versionsproblem und Minor-Fallback
+### Version issues and minor fallback
 
-Der Hub liefert immer nur die **neueste** Version. Verlangt ein Inhalt eine ältere
-Minor-Version (z. B. 1.1, im Hub gibt es 1.2), bleibt er als „fehlend“ markiert. Die
-Admin-Seite weist darauf hin. Lösungen:
+The Hub always delivers only the **latest** version. If content requires an older minor version (e.g., 1.1, while the Hub has 1.2), it remains marked as "missing." The admin page points this out. Solutions:
 
-- den Inhalt in Lumi öffnen, aktualisieren und neu exportieren, oder
-- die Einstellung `minor_fallback` einschalten: Dann wird die höchste installierte
-  Minor-Version derselben Major-Version verwendet. Das funktioniert meistens, H5P
-  garantiert es aber nicht.
+* open the content in Lumi, update it, and re-export it, or
+* enable the `minor_fallback` setting: the highest installed minor version of the same major version is then used. This usually works, though H5P does not guarantee it.
 
-## Sicherheit
+## Security
 
-- Entpackt werden nur erlaubte Dateitypen (angelehnt an die H5P-Whitelist), in Inhalten
-  ohne `.js`/`.css`. Pfade mit `..` oder absolute Pfade führen zur Ablehnung der Datei.
-- Inhalte werden nur ausgeliefert, wenn der Benutzer Leserechte auf die H5P-Datei hat.
-  Bibliotheken sind für alle abrufbar, sie enthalten nur Programmcode.
-- H5P-Bibliotheken sind JavaScript, das im Kontext des Wikis läuft (wie bei WordPress oder
-  Moodle auch). Deshalb dürfen nur vertrauenswürdige Personen Bibliotheken installieren.
+* Only allowed file types are unpacked (based on the H5P whitelist), with no `.js`/`.css` inside content. Paths containing `..` or absolute paths cause the file to be rejected.
+* Content is served only if the user has read permission on the H5P file. Libraries are accessible to everyone, as they contain only program code.
+* H5P libraries are JavaScript that runs in the wiki's context (just as in WordPress or Moodle). Therefore, only trustworthy people should be allowed to install libraries.
 
-## Einstellungen
+## Settings
 
-Im Konfigurationsmanager unter „h5p“: `libmanagers`, `strip_on_upload`, `frame`,
-`copyright`, `fullscreen`, `icon`, `export`, `replace`, `maxsize` (MB, entpackt), `storagedir`, `hub`,
-`minor_fallback`.
+In the Configuration Manager under "h5p": `libmanagers`, `strip_on_upload`, `frame`, `copyright`, `fullscreen`, `icon`, `export`, `replace`, `maxsize` (MB, unpacked), `storagedir`, `hub`, `minor_fallback`.
 
-## Bekannte Grenzen
+## Known limitations
 
-- „Reuse“ lädt die Datei aus dem Medienmanager herunter (mit Prüfung der Leserechte).
-  Sie enthält keine Bibliotheken; Moodle, WordPress und Lumi holen diese beim Import
-  selbst vom H5P-Hub. „Embed“ wird nicht unterstützt.
+* "Reuse" downloads the file from the Media Manager (checking read permissions). It contains no libraries; Moodle, WordPress, and Lumi fetch them themselves from the H5P Hub on import. "Embed" is not supported.
+* Display only: results (xAPI) are not saved, and there is no editor.
+* If an H5P file is deleted in the Media Manager, the plugin also removes its unpacked content. If a file disappears another way (FTP, Move plugin), the **Delete orphaned content** button on the admin page helps. Unpacked content is recreated automatically when needed.
+* When libraries are stripped, the file is modified after upload. The media changelog may therefore show the original file size.
 
-- Nur Anzeige: Ergebnisse (xAPI) werden nicht gespeichert, es gibt keinen Editor.
-- Wird eine H5P-Datei im Medienmanager gelöscht, entfernt das Plugin auch ihren entpackten
-  Inhalt. Verschwindet eine Datei auf anderem Weg (FTP, Move-Plugin), hilft der Knopf
-  „Verwaiste Inhalte löschen“ auf der Admin-Seite. Entpackte Inhalte werden bei Bedarf
-  ohnehin neu erzeugt.
-- Beim Entfernen der Bibliotheken wird die Datei nach dem Upload verändert. Das
-  Medien-Änderungsprotokoll zeigt deshalb ggf. die ursprüngliche Dateigröße.
-
-## Test der Kernlogik
+## Testing core logic
 
 ```
 php _test/selftest.php
+
 ```
